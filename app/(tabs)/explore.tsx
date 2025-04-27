@@ -3,6 +3,8 @@ import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import { useState, useEffect } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import base from '@/data/base.json';
+import { FlatList } from 'react-native-gesture-handler';
+
 
 export default function Explore() {
   const [dbList, setDbList] = useState<JSX.Element[]>([]);
@@ -18,9 +20,25 @@ export default function Explore() {
           ));
           setDbList(db);
         }} />
+
+      <Button title='cancel' onPress={()=> setDbList([])}/>
+
+
+
         <View>
           {dbList}
         </View>
+    
+    {/* <FlatList  */}
+      {/* // data={base} */}
+      {/* // keyExtractor={(item, index) => index.toString()} */}
+      {/* // renderItem={({item})=>( */}
+        {/* // <Text style={{fontSize: 18}}> */}
+          {/* {item.id}. {item.title} {item.description} */}
+        {/* </Text> */}
+      {/* // )} */}
+    {/* // /> */}
+
       </ScrollView>
     </GestureHandlerRootView>
   );
