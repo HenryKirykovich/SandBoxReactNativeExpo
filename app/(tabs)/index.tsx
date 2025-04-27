@@ -1,66 +1,105 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { Image, StyleSheet, Platform, Text, Button, View, Alert } from 'react-native';
+import { ScrollView, TextInput } from 'react-native-gesture-handler';
+import { useState } from 'react';
+import { Item } from 'react-native-paper/lib/typescript/components/Drawer/Drawer';
+import { useEffect } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import base from '@/data/base.json'
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
 
 export default function HomeScreen() {
+  const [text, setText] = useState('');
+  const [getter, setter] = useState<string[]>([])
+  const [retrievedItems, setRetrievedItems] = useState<JSX.Element[]>([]);
+
+  const [calculator, calRandom] = useState(0);
+
+  const [dbList, setDbList] = useState<JSX.Element[]>([]);
+
+  
+  useEffect(() => {
+    console.log("getter is changed:", getter);
+  }, [getter]);
+  
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+    <ScrollView contentContainerStyle={styles.titleContainer}>
+      <Text style={styles.title}>This screen doesn't exist.</Text>
+      <View style={styles.stepContainer}>
+        <Text style={styles.title}>{JSON.stringify(getter)}</Text>
+
+        <TextInput style={styles.input} placeholder='' value={text} onChangeText={setText}/>
+     
+        <Button title='add' onPress={() => {
+          setter(prevItems => [...prevItems, text]);
+          alert('Successfully added');
+          setText('');
+      }}/>
+
+        <Button
+          title="Retrieve"
+          onPress={() => {
+    if (getter.length > 0) {
+    const items = getter.map((item, index) => (
+    <Text key={index} style={{ fontSize: 18 }}>
+      {index + 1}. {item}
+    </Text>
+    ));
+    setRetrievedItems(items);
+    } else {
+    alert('No items to retrieve.');
+        }
+      }}
+    />
+
+    <Button title='Randoom number' onPress={() => {
+      const x = Math.floor(Math.random() * 100);
+      calRandom(x);
+      setText(x.toString());
+    }} />
+
+    <Text style={styles.title}>{calculator}</Text>
+    
+    <Button title='Retrieve from DBlilst' onPress={()=>{
+      
+      const db = base.map((item, index) => (
+        <Text key={index} style={{ fontSize: 18 }}>
+          {item.id}. {item.title} {"Desctription: "}{item.description} 
+        </Text>
+      ));
+      setDbList(db)
+    }} /> 
+
+    <View>
+      {dbList}
+    </View>
+
+    <View style={{ marginTop: 20 }}>
+      {retrievedItems.length > 0 ? retrievedItems : <Text>No items yet.</Text>}
+    </View>
+    
+
+
+
+    </View>
+    </ScrollView>
+    </GestureHandlerRootView>  
   );
 }
-
+  
 const styles = StyleSheet.create({
   titleContainer: {
-    flexDirection: 'row',
+    flexGrow: 1,
+    justifyContent: "center",
+    alignContent: "center",
+    backgroundColor: "white",
     alignItems: 'center',
     gap: 8,
   },
   stepContainer: {
+  
+    width: '33%',
+    alignContent: 'center',
     gap: 8,
     marginBottom: 8,
   },
@@ -71,4 +110,19 @@ const styles = StyleSheet.create({
     left: 0,
     position: 'absolute',
   },
+  title: {
+    fontSize: 26,
+  },
+  but: {
+    fontSize: 16,
+    color: '#fff'
+  }, 
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 20,
+    paddingLeft: 10,
+  }
+
 });
