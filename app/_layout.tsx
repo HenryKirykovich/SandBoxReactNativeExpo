@@ -6,6 +6,8 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 import { GestureHandlerRootView } from 'react-native-gesture-handler'; // import
+import { GluestackUIProvider } from '@gluestack-ui/themed';
+import { config } from '../gluestack-ui.config';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 
@@ -28,6 +30,7 @@ export default function RootLayout() {
   }
 
   return (
+    <GluestackUIProvider config={config}>
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
@@ -37,5 +40,6 @@ export default function RootLayout() {
         <StatusBar style="auto" />
       </ThemeProvider>
     </GestureHandlerRootView>
+    </GluestackUIProvider>
   );
 }

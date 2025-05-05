@@ -14,6 +14,9 @@ export default function HomeScreen() {
 
   const [calculator, calRandom] = useState(0);
 
+
+
+
   const [dbList, setDbList] = useState<JSX.Element[]>([]);
 
   
